@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>MikBank</title>
+
+<!-- Firebase -->
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js";
+import { getAuth, createUserWithEmailAndPassword, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyBJCy4XJwcNLFftdEoNcIGuQVyupHb7e3I",
+  authDomain: "mikbank-729d4.firebaseapp.com",
+  projectId: "mikbank-729d4",
+  storageBucket: "mikbank-729d4.firebasestorage.app",
+  messagingSenderId: "901833443630",
+  appId: "1:901833443630:web:70c25d4be5178a4c6212bf"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+
+window.register = () => {
+  const email = emailInput.value;
+  const pass = passInput.value;
+  createUserWithEmailAndPassword(auth, email, pass)
+    .then(()=>alert("Регистрация успешна"))
+    .catch(e=>alert(e.message));
+};
+
+window.login = () => {
+  const email = emailInput.value;
+  const pass = passInput.value;
+  signInWithEmailAndPassword(auth, email, pass)
+    .catch(e=>alert(e.message));
+};
+
+window.logout = () => signOut(auth);
+
+onAuthStateChanged(auth, user => {
+  if(user){
+    loginScreen.classList.add("hidden");
+    homeScreen.classList.remove("hidden");
+  } else {
+    loginScreen.classList.remove("hidden");
+    homeScreen.classList.add("hidden");
+  }
+});
+</script>
+
+<style>
+:root{--bg:#f4f6fa;--card:#fff;--pri:#1e88e5;--txt:#111}
+.dark{--bg:#0f172a;--card:#111827;--pri:#38bdf8;--txt:#e5e7eb}
+*{box-sizing:border-box;font-family:system-ui}
+body{margin:0;background:var(--bg);color:var(--txt)}
+header{padding:14px;background:var(--card);font-weight:600}
+main{max-width:420px;margin:auto;padding:12px}
+.card{background:var(--card);border-radius:14px;padding:14px;margin-bottom:12px}
+.btn{width:100%;padding:12px;border-radius:12px;border:0;background:var(--pri);color:#fff;margin-top:8px}
+input{width:100%;padding:12px;border-radius:12px;border:1px solid #ccc;margin:6px 0}
+.hidden{display:none}
+.small{font-size:12px;opacity:.7}
+.nav{display:flex;justify-content:space-around;position:fixed;bottom:0;left:0;right:0;background:var(--card)}
+</style>
+</head>
+
+<body>
+
+<header>MikBank</header>
+
+<main id="loginScreen">
+  <div class="card">
+    <input id="emailInput" placeholder="Email">
+    <input id="passInput" type="password" placeholder="Пароль">
+    <button class="btn" onclick="login()">Войти</button>
+    <button class="btn" onclick="register()">Регистрация</button>
+  </div>
+</main>
+
+<main id="homeScreen" class="hidden">
+  <div class="card">
+    <div class="small">Баланс</div>
+    <div style="font-size:22px">— ₽</div>
+  </div>
+
+  <div class="card">
+    <button class="btn" onclick="pay()">Оплатить картой</button>
+  </div>
+
+  <div class="card">
+    <button class="btn" onclick="logout()">Выйти</button>
+  </div>
+</main>
+
+<script>
+function pay(){
+  window.open(
+    "https://yoomoney.ru/quickpay/shop-widget?writer=seller&targets=Пополнение+MikBank&default-sum=500&payment-type-choice=on&account=4100119443101227",
+    "_blank"
+  );
+}
+</script>
+
+  </body>
+</html>
+
+</body>
+</html>
